@@ -79,25 +79,5 @@ namespace Swapper.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon TrayIconLightLeft {
-            get {
-                object obj = ResourceManager.GetObject("TrayIconLightLeft", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon TrayIconLightRight {
-            get {
-                object obj = ResourceManager.GetObject("TrayIconLightRight", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
     }
 }
