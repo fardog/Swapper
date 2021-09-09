@@ -1,6 +1,5 @@
-﻿name:  Wpf Continuous Integration
+﻿name:  Debug Build
 
-# Trigger on every master branch push and pull request
 on:
   push:
     branches:
@@ -17,25 +16,15 @@ jobs:
 
     env:
       Solution_Path: Swapper.sln
-      # Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
-
-    # Use Nerdbank.GitVersioning to set version variables: https://github.com/AArnott/nbgv
-    - name: Use Nerdbank.GitVersioning to set version variables
-      uses: aarnott/nbgv@v0.4
-      with:
-        setAllVars: true
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1
 
-    # Restore the application
-    - name:  Restore the Wpf application to populate the obj folder
+    - name: Build solution
       run: msbuild $env:Solution_Path /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
       env:
         Configuration: Debug
