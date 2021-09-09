@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace Swapper
 {
@@ -31,16 +32,21 @@ namespace Swapper
             };
             trayIcon.MouseClick += MouseClick;
 
-            // set current primary state; we need to toggle things quickly to get the current value,
-            // at least until i figure out something better.
-            if (SwapMouseButton(true))
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(System_UserPreferenceChanged);
+
+            UpdateCurrentPrimaryButton();
+        }
+
+        private void UpdateCurrentPrimaryButton()
+        {
+            PrimaryButton = SystemInformation.MouseButtonsSwapped ? ButtonState.Right : ButtonState.Left;
+        }
+
+        private void System_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            if (e.Category == UserPreferenceCategory.Mouse)
             {
-                PrimaryButton = ButtonState.Right;
-            }
-            else
-            {
-                SwapMouseButton(false);
-                PrimaryButton = ButtonState.Left;
+                UpdateCurrentPrimaryButton();
             }
         }
 
