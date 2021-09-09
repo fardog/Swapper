@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Swapper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tray utility for swapping mouse buttons.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Swapper")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright © 2020 Nathan Wittstock")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
