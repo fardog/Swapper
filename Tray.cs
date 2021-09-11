@@ -8,6 +8,7 @@ namespace Swapper
     {
         private readonly NotifyIcon trayIcon;
         private readonly MouseButtonManager buttonManager;
+        private AboutBox aboutBox;
 
         public Tray()
         {
@@ -15,6 +16,7 @@ namespace Swapper
             trayIcon = new NotifyIcon()
             {
                 ContextMenu = new ContextMenu(new MenuItem[] {
+                    new MenuItem("About", MenuItem_About),
                     new MenuItem("Exit", MenuItem_Exit)
                 }),
                 Visible = true,
@@ -24,6 +26,16 @@ namespace Swapper
             buttonManager = new MouseButtonManager();
             buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(buttonManager.PrimaryButton);
+        }
+
+        private void MenuItem_About(object sender, EventArgs e)
+        {
+            if (aboutBox == null)
+            {
+                aboutBox = new AboutBox();
+                aboutBox.Show();
+                aboutBox.FormClosed += (s, ee) => { aboutBox = null; };
+            }
         }
 
         private void ButtonManager_MouseButtonChanged(object sender, MouseButtonChangedEventArgs e)
