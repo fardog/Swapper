@@ -1,24 +1,13 @@
 ﻿using Swapper.Properties;
 using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace Swapper
 {
-    public enum ButtonState
-    {
-        Left,
-        Right
-    }
-
     public class Tray: ApplicationContext
     {
-        private NotifyIcon trayIcon;
-        private ButtonState primaryButton;
-
-        [DllImport("user32.dll")]
-        public static extern bool SwapMouseButton(bool bSwap);
+        private readonly NotifyIcon trayIcon;
+        private readonly MouseButtonManager buttonManager;
 
         public Tray()
         {
@@ -26,38 +15,30 @@ namespace Swapper
             trayIcon = new NotifyIcon()
             {
                 ContextMenu = new ContextMenu(new MenuItem[] {
-                    new MenuItem("Exit", Exit)
+                    new MenuItem("Exit", MenuItem_Exit)
                 }),
                 Visible = true,
             };
             trayIcon.MouseClick += MouseClick;
 
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(System_UserPreferenceChanged);
-
-            UpdateCurrentPrimaryButton();
+            buttonManager = new MouseButtonManager();
+            buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
+            UpdateUI(buttonManager.PrimaryButton);
         }
 
-        private void UpdateCurrentPrimaryButton()
+        private void ButtonManager_MouseButtonChanged(object sender, MouseButtonChangedEventArgs e)
         {
-            PrimaryButton = SystemInformation.MouseButtonsSwapped ? ButtonState.Right : ButtonState.Left;
+            UpdateUI(e.PrimaryButton);
         }
 
-        private void System_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+       private void UpdateUI(ButtonState primaryButton)
         {
-            if (e.Category == UserPreferenceCategory.Mouse)
-            {
-                UpdateCurrentPrimaryButton();
-            }
-        }
-
-        private void UpdateUI()
-        {
-            if (PrimaryButton == ButtonState.Left)
+            if (primaryButton == ButtonState.Left)
             {
                 trayIcon.Text = "Primary Button: Left";
                 trayIcon.Icon = Resources.TrayIconDarkLeft;
             }
-            else if (PrimaryButton == ButtonState.Right)
+            else if (primaryButton == ButtonState.Right)
             {
                 
                 trayIcon.Text = "Primary Button: Right";
@@ -65,42 +46,14 @@ namespace Swapper
             }
         }
 
-        public ButtonState PrimaryButton
-        {
-            get
-            {
-                return primaryButton;
-            }
-            set
-            {
-                if (value == ButtonState.Left)
-                {
-                    SwapMouseButton(false);
-                }
-                else if (value == ButtonState.Right)
-                {
-                    SwapMouseButton(true);
-                }
-
-                primaryButton = value;
-                UpdateUI();
-            }
-        }
-
-        private void Swap()
-        {
-            if (PrimaryButton == ButtonState.Left) PrimaryButton = ButtonState.Right;
-            else if (PrimaryButton == ButtonState.Right) PrimaryButton = ButtonState.Left;
-        }
-
-        private void MouseClick(object sender, MouseEventArgs e)
+         private void MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
-            Swap();
+            buttonManager.Swap();
         }
 
-        void Exit(object sender, EventArgs e)
+        void MenuItem_Exit(object sender, EventArgs e)
         {
             trayIcon.Visible = false;
             Application.Exit();
