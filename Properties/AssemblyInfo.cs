@@ -6,11 +6,16 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Swapper")]
-[assembly: AssemblyDescription("Tray utility for swapping mouse buttons.")]
+[assembly: AssemblyDescription(@"A tray utility for swapping mouse buttons.
+
+Swapper is open source software, available under the Apache License, Version 2.0.
+
+For further information, visit: github.com/fardog/Swapper
+")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Swapper")]
-[assembly: AssemblyCopyright("Copyright © 2020 Nathan Wittstock")]
+[assembly: AssemblyCopyright("Copyright © 2021 Nathan Wittstock")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
