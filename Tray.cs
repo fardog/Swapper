@@ -1,6 +1,7 @@
 ﻿using Swapper.Properties;
 using System;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Swapper
 {
@@ -9,6 +10,7 @@ namespace Swapper
         private readonly NotifyIcon trayIcon;
         private readonly MouseButtonManager buttonManager;
         private AboutBox aboutBox;
+        private HotKeyManager keyManager;
 
         public Tray()
         {
@@ -23,9 +25,22 @@ namespace Swapper
             };
             trayIcon.MouseClick += MouseClick;
 
+            keyManager = new HotKeyManager();
+            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Keys.Left);
+            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Keys.Right);
+            keyManager.OnKeyPressed += KeyManager_OnKeyPressed;
+
             buttonManager = new MouseButtonManager();
             buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(buttonManager.PrimaryButton);
+        }
+
+        private void KeyManager_OnKeyPressed(object sender, HotKeyManager.KeyPressedEventArgs e)
+        {
+            if (e.Key == Keys.Left)
+                buttonManager.PrimaryButton = ButtonState.Left;
+            else if (e.Key == Keys.Right)
+                buttonManager.PrimaryButton = ButtonState.Right;
         }
 
         private void MenuItem_About(object sender, EventArgs e)
