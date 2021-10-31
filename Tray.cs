@@ -26,8 +26,8 @@ namespace Swapper
             trayIcon.MouseClick += MouseClick;
 
             keyManager = new HotKeyManager();
-            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Keys.Left);
-            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Keys.Right);
+            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Key.Left);
+            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Key.Right);
             keyManager.OnKeyPressed += KeyManager_OnKeyPressed;
 
             buttonManager = new MouseButtonManager();
@@ -37,9 +37,9 @@ namespace Swapper
 
         private void KeyManager_OnKeyPressed(object sender, HotKeyManager.KeyPressedEventArgs e)
         {
-            if (e.Key == Keys.Left)
+            if (e.Key == Key.Left)
                 buttonManager.PrimaryButton = ButtonState.Left;
-            else if (e.Key == Keys.Right)
+            else if (e.Key == Key.Right)
                 buttonManager.PrimaryButton = ButtonState.Right;
         }
 
@@ -73,7 +73,7 @@ namespace Swapper
             }
         }
 
-         private void MouseClick(object sender, MouseEventArgs e)
+         private void MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 

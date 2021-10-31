@@ -51,9 +51,15 @@ namespace Swapper
         public class KeyPressedEventArgs : EventArgs
         {
             public ModifierKeys Modifier { get; private set; }
-            public Keys Key { get; private set; }
+            public Key Key { get; private set; }
 
             public KeyPressedEventArgs(ModifierKeys modifier, Keys key)
+            {
+                Modifier = modifier;
+                Key = KeyInterop.KeyFromVirtualKey((int)key);
+            }
+
+            public KeyPressedEventArgs(ModifierKeys modifier, Key key)
             {
                 Modifier = modifier;
                 Key = key;
@@ -70,10 +76,10 @@ namespace Swapper
             OnKeyPressed.Invoke(this, e);
         }
 
-        public int RegisterHotKey(ModifierKeys modifier, Keys key)
+        public int RegisterHotKey(ModifierKeys modifier, Key key)
         {
             _currentId += 1;
-            if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
+            if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)KeyInterop.VirtualKeyFromKey(key)))
                 throw new InvalidOperationException("Couldn't register hot key.");
             return _currentId;
         }
