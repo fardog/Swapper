@@ -130,6 +130,7 @@ namespace Swapper
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bind Hot Key";
             this.TopMost = true;
             this.tableLayoutPanel1.ResumeLayout(false);

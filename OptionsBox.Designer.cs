@@ -160,6 +160,7 @@ namespace Swapper
             this.Name = "OptionsBox";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Options";
             this.rootLayout.ResumeLayout(false);
             this.rootLayout.PerformLayout();
