@@ -27,13 +27,9 @@ namespace Swapper
 
         private void CaptureKeyGestureBox_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            var converter = new KeyGestureConverter();
-            _gesture = (KeyGesture)converter.ConvertFrom(e);
-            if (_gesture != null)
-            {
-                okButton.Enabled = true;
-                gestureLabel.Text = _gesture.GetDisplayStringForCulture(CultureInfo.CurrentUICulture);
-            }
+            ModifierKeys modifier = (ModifierKeys)((int)e.KeyData & 0xFFFF);
+            Console.WriteLine(e.KeyCode);
+            Console.WriteLine(modifier);
         }
 
         private void okButton_Click(object sender, EventArgs e)
