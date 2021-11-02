@@ -1,5 +1,6 @@
 ﻿using Swapper.Properties;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -10,7 +11,10 @@ namespace Swapper
         private readonly NotifyIcon trayIcon;
         private readonly MouseButtonManager buttonManager;
         private AboutBox aboutBox;
+        private OptionsBox optionsBox;
         private HotKeyManager keyManager;
+        private HashSet<int> hotkeyHandles = new HashSet<int>();
+        private ConfigurationManager configurationManager = new StaticConfigurationManager();
 
         public Tray()
         {
@@ -19,20 +23,36 @@ namespace Swapper
             {
                 ContextMenu = new ContextMenu(new MenuItem[] {
                     new MenuItem("About", MenuItem_About),
+                    new MenuItem("Options", MenuItem_Options),
                     new MenuItem("Exit", MenuItem_Exit)
                 }),
                 Visible = true,
             };
             trayIcon.MouseClick += MouseClick;
 
+            configurationManager.OnConfigurationChange += delegate { registerHotKeys(); };
+
             keyManager = new HotKeyManager();
-            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Key.Left);
-            keyManager.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift, Key.Right);
+            registerHotKeys();
             keyManager.OnKeyPressed += KeyManager_OnKeyPressed;
 
             buttonManager = new MouseButtonManager();
             buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(buttonManager.PrimaryButton);
+        }
+
+        private void registerHotKeys()
+        {
+            foreach(var handle in hotkeyHandles)
+            {
+                keyManager.UnregisterHotKey(handle);
+            }
+            hotkeyHandles.Clear();
+
+            hotkeyHandles.Add(
+                keyManager.RegisterHotKey(configurationManager.LeftGesture.Modifiers, configurationManager.LeftGesture.Key));
+            hotkeyHandles.Add(
+                keyManager.RegisterHotKey(configurationManager.RightGesture.Modifiers, configurationManager.RightGesture.Key));
         }
 
         private void KeyManager_OnKeyPressed(object sender, HotKeyManager.KeyPressedEventArgs e)
@@ -50,6 +70,16 @@ namespace Swapper
                 aboutBox = new AboutBox();
                 aboutBox.Show();
                 aboutBox.FormClosed += (s, ee) => { aboutBox = null; };
+            }
+        }
+
+        private void MenuItem_Options(object sender, EventArgs e)
+        {
+            if (optionsBox == null)
+            {
+                optionsBox = new OptionsBox(configurationManager);
+                optionsBox.Show();
+                optionsBox.FormClosed += (s, ee) => { optionsBox = null; };
             }
         }
 

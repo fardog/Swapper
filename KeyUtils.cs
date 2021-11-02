@@ -21,4 +21,14 @@ namespace Swapper
             return gesture.ToString();
         }
     }
+
+    public class KeyGestureEventArgs : EventArgs
+    {
+        public KeyGesture Gesture { get; private set; }
+
+        public KeyGestureEventArgs(KeyGesture gesture)
+        {
+            Gesture = gesture;
+        }
+    }
 }
