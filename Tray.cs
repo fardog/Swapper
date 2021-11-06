@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace Swapper
 {
@@ -14,7 +13,7 @@ namespace Swapper
         private OptionsBox optionsBox;
         private HotKeyManager keyManager;
         private HashSet<int> hotkeyHandles = new HashSet<int>();
-        private ConfigurationManager configurationManager = new StaticConfigurationManager();
+        private SwapperConfiguration configurationManager = new DynamicConfigurationManager();
 
         public Tray()
         {
@@ -34,7 +33,7 @@ namespace Swapper
 
             keyManager = new HotKeyManager();
             registerHotKeys();
-            keyManager.OnKeyPressed += KeyManager_OnKeyPressed;
+            keyManager.OnKeyGesture += KeyManager_OnKeyGesture;
 
             buttonManager = new MouseButtonManager();
             buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
@@ -49,17 +48,19 @@ namespace Swapper
             }
             hotkeyHandles.Clear();
 
-            hotkeyHandles.Add(
-                keyManager.RegisterHotKey(configurationManager.LeftGesture.Modifiers, configurationManager.LeftGesture.Key));
-            hotkeyHandles.Add(
-                keyManager.RegisterHotKey(configurationManager.RightGesture.Modifiers, configurationManager.RightGesture.Key));
+            if (configurationManager.LeftGesture != null)
+                hotkeyHandles.Add(
+                    keyManager.RegisterHotKey(configurationManager.LeftGesture.Modifiers, configurationManager.LeftGesture.Key));
+            if (configurationManager.RightGesture != null)
+                hotkeyHandles.Add(
+                    keyManager.RegisterHotKey(configurationManager.RightGesture.Modifiers, configurationManager.RightGesture.Key));
         }
 
-        private void KeyManager_OnKeyPressed(object sender, HotKeyManager.KeyPressedEventArgs e)
+        private void KeyManager_OnKeyGesture(object sender, KeyGestureEventArgs e)
         {
-            if (e.Key == Key.Left)
+            if (e.Gesture.Equivalent(configurationManager.LeftGesture))
                 buttonManager.PrimaryButton = ButtonState.Left;
-            else if (e.Key == Key.Right)
+            if (e.Gesture.Equivalent(configurationManager.RightGesture))
                 buttonManager.PrimaryButton = ButtonState.Right;
         }
 

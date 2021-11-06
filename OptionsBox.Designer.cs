@@ -32,11 +32,13 @@ namespace Swapper
             this.rootLayout = new System.Windows.Forms.TableLayoutPanel();
             this.leftLabel = new System.Windows.Forms.Label();
             this.rightLabel = new System.Windows.Forms.Label();
+            this.leftGestureText = new System.Windows.Forms.Label();
             this.rightGestureText = new System.Windows.Forms.Label();
             this.setLeftButton = new System.Windows.Forms.Button();
             this.setRightButton = new System.Windows.Forms.Button();
+            this.clearLeftButton = new System.Windows.Forms.Button();
+            this.clearRightButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.leftGestureText = new System.Windows.Forms.Label();
             this.rootLayout.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -45,16 +47,19 @@ namespace Swapper
             // 
             this.rootLayout.AutoSize = true;
             this.rootLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.rootLayout.ColumnCount = 3;
+            this.rootLayout.ColumnCount = 4;
             this.rootLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.rootLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.rootLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.rootLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.rootLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.rootLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.rootLayout.Controls.Add(this.leftLabel, 0, 0);
             this.rootLayout.Controls.Add(this.rightLabel, 0, 1);
             this.rootLayout.Controls.Add(this.leftGestureText, 1, 0);
             this.rootLayout.Controls.Add(this.rightGestureText, 1, 1);
             this.rootLayout.Controls.Add(this.setLeftButton, 2, 0);
             this.rootLayout.Controls.Add(this.setRightButton, 2, 1);
+            this.rootLayout.Controls.Add(this.clearLeftButton, 3, 0);
+            this.rootLayout.Controls.Add(this.clearRightButton, 3, 1);
             this.rootLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rootLayout.Location = new System.Drawing.Point(3, 27);
             this.rootLayout.Name = "rootLayout";
@@ -88,13 +93,24 @@ namespace Swapper
             this.rightLabel.Text = "Right Primary";
             this.rightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // leftGestureText
+            // 
+            this.leftGestureText.AutoSize = true;
+            this.leftGestureText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.leftGestureText.Location = new System.Drawing.Point(176, 0);
+            this.leftGestureText.Name = "leftGestureText";
+            this.leftGestureText.Size = new System.Drawing.Size(224, 41);
+            this.leftGestureText.TabIndex = 2;
+            this.leftGestureText.Text = "…";
+            this.leftGestureText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // rightGestureText
             // 
             this.rightGestureText.AutoSize = true;
             this.rightGestureText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightGestureText.Location = new System.Drawing.Point(176, 41);
             this.rightGestureText.Name = "rightGestureText";
-            this.rightGestureText.Size = new System.Drawing.Size(282, 89);
+            this.rightGestureText.Size = new System.Drawing.Size(224, 89);
             this.rightGestureText.TabIndex = 3;
             this.rightGestureText.Text = "…";
             this.rightGestureText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -103,9 +119,9 @@ namespace Swapper
             // 
             this.setLeftButton.AutoSize = true;
             this.setLeftButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.setLeftButton.Location = new System.Drawing.Point(464, 3);
+            this.setLeftButton.Location = new System.Drawing.Point(406, 3);
             this.setLeftButton.Name = "setLeftButton";
-            this.setLeftButton.Size = new System.Drawing.Size(110, 35);
+            this.setLeftButton.Size = new System.Drawing.Size(80, 35);
             this.setLeftButton.TabIndex = 4;
             this.setLeftButton.Text = "Set";
             this.setLeftButton.UseVisualStyleBackColor = true;
@@ -115,13 +131,37 @@ namespace Swapper
             // 
             this.setRightButton.AutoSize = true;
             this.setRightButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.setRightButton.Location = new System.Drawing.Point(464, 44);
+            this.setRightButton.Location = new System.Drawing.Point(406, 44);
             this.setRightButton.Name = "setRightButton";
-            this.setRightButton.Size = new System.Drawing.Size(110, 35);
+            this.setRightButton.Size = new System.Drawing.Size(80, 35);
             this.setRightButton.TabIndex = 5;
             this.setRightButton.Text = "Set";
             this.setRightButton.UseVisualStyleBackColor = true;
             this.setRightButton.Click += new System.EventHandler(this.setRightButton_Click);
+            // 
+            // clearLeftButton
+            // 
+            this.clearLeftButton.AutoSize = true;
+            this.clearLeftButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.clearLeftButton.Location = new System.Drawing.Point(492, 3);
+            this.clearLeftButton.Name = "clearLeftButton";
+            this.clearLeftButton.Size = new System.Drawing.Size(82, 35);
+            this.clearLeftButton.TabIndex = 6;
+            this.clearLeftButton.Text = "Clear";
+            this.clearLeftButton.UseVisualStyleBackColor = true;
+            this.clearLeftButton.Click += new System.EventHandler(this.clearLeftButton_Click);
+            // 
+            // clearRightButton
+            // 
+            this.clearRightButton.AutoSize = true;
+            this.clearRightButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.clearRightButton.Location = new System.Drawing.Point(492, 44);
+            this.clearRightButton.Name = "clearRightButton";
+            this.clearRightButton.Size = new System.Drawing.Size(82, 35);
+            this.clearRightButton.TabIndex = 7;
+            this.clearRightButton.Text = "Clear";
+            this.clearRightButton.UseVisualStyleBackColor = true;
+            this.clearRightButton.Click += new System.EventHandler(this.clearRightButton_Click);
             // 
             // groupBox1
             // 
@@ -135,17 +175,6 @@ namespace Swapper
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Hot Keys";
-            // 
-            // leftGestureText
-            // 
-            this.leftGestureText.AutoSize = true;
-            this.leftGestureText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.leftGestureText.Location = new System.Drawing.Point(176, 0);
-            this.leftGestureText.Name = "leftGestureText";
-            this.leftGestureText.Size = new System.Drawing.Size(282, 41);
-            this.leftGestureText.TabIndex = 2;
-            this.leftGestureText.Text = "…";
-            this.leftGestureText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // OptionsBox
             // 
@@ -181,5 +210,7 @@ namespace Swapper
         private System.Windows.Forms.Button setRightButton;
         private System.Windows.Forms.Label leftGestureText;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button clearLeftButton;
+        private System.Windows.Forms.Button clearRightButton;
     }
 }

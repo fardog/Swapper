@@ -22,14 +22,29 @@ namespace Swapper
         {
             InitializeComponent();
             okButton.Enabled = false;
-            KeyUp += CaptureKeyGestureBox_KeyUp;
+            KeyDown += CaptureKeyGestureBox_KeyUp;
         }
 
         private void CaptureKeyGestureBox_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            ModifierKeys modifier = (ModifierKeys)((int)e.KeyData & 0xFFFF);
-            Console.WriteLine(e.KeyCode);
-            Console.WriteLine(modifier);
+            KeyGesture gesture = null;
+            try
+            {
+                gesture = KeyUtils.ToKeyGesture(e);
+            }
+            catch (NotSupportedException) { }
+
+            if (gesture?.Complete() ?? false)
+            {
+                okButton.Enabled = true;
+                gestureLabel.Text = gesture.GetDisplayStringForCurrentCulture();
+                _gesture = gesture;
+            }
+            else
+            {
+                okButton.Enabled = false;
+                _gesture = null;
+            }
         }
 
         private void okButton_Click(object sender, EventArgs e)

@@ -16,13 +16,13 @@ namespace Swapper
         private HiddenWindow _window = new HiddenWindow();
         private int _currentId;
 
-        public event EventHandler<KeyPressedEventArgs> OnKeyPressed = delegate { };
+        public event EventHandler<KeyGestureEventArgs> OnKeyGesture = delegate { };
 
         public class HiddenWindow : NativeWindow, IDisposable
         {
             private static int WM_HOTKEY = 0x0312;
 
-            public event EventHandler<KeyPressedEventArgs> OnKeyPressed = delegate { };
+            public event EventHandler<KeyGestureEventArgs> OnKeyGesture = delegate { };
 
             public HiddenWindow()
             {
@@ -38,7 +38,7 @@ namespace Swapper
                     Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
                     ModifierKeys modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
 
-                    OnKeyPressed.Invoke(this, new KeyPressedEventArgs(modifier, key));
+                    OnKeyGesture.Invoke(this, new KeyGestureEventArgs(KeyUtils.ToKeyGesture(modifier, key)));
                 }
             }
 
@@ -68,12 +68,12 @@ namespace Swapper
 
         public HotKeyManager()
         {
-            _window.OnKeyPressed += _window_OnKeyPressed;
+            _window.OnKeyGesture += _window_OnKeyGesture;
         }
 
-        private void _window_OnKeyPressed(object sender, KeyPressedEventArgs e)
+        private void _window_OnKeyGesture(object sender, KeyGestureEventArgs e)
         {
-            OnKeyPressed.Invoke(this, e);
+            OnKeyGesture.Invoke(this, e);
         }
 
         public int RegisterHotKey(ModifierKeys modifier, Key key)

@@ -6,10 +6,10 @@ namespace Swapper
 {
     public partial class OptionsBox : Form
     {
-        private ConfigurationManager configurationManager;
+        private SwapperConfiguration configurationManager;
         private CaptureKeyGestureBox _captureBox;
 
-        public OptionsBox(ConfigurationManager configurationManager)
+        public OptionsBox(SwapperConfiguration configurationManager)
         {
             InitializeComponent();
 
@@ -21,8 +21,8 @@ namespace Swapper
 
         private void updateFromConfiguration()
         {
-            leftGestureText.Text = configurationManager.LeftGesture.GetDisplayStringForCulture(CultureInfo.CurrentUICulture);
-            rightGestureText.Text = configurationManager.RightGesture.GetDisplayStringForCulture(CultureInfo.CurrentUICulture);
+            leftGestureText.Text = configurationManager.LeftGesture?.GetDisplayStringForCurrentCulture() ?? "None";
+            rightGestureText.Text = configurationManager.RightGesture?.GetDisplayStringForCurrentCulture() ?? "None";
         }
 
         private void ConfigurationManager_OnConfigurationChange(object sender, EventArgs e)
@@ -37,6 +37,11 @@ namespace Swapper
                 _captureBox = new CaptureKeyGestureBox();
                 _captureBox.Show();
                 _captureBox.FormClosed += (s, ee) => { _captureBox = null; };
+                _captureBox.OnGestureAccepted += (s, ee) =>
+                {
+                    _captureBox.Close();
+                    configurationManager.LeftGesture = ee.Gesture;
+                };
             }
         }
 
@@ -47,7 +52,22 @@ namespace Swapper
                 _captureBox = new CaptureKeyGestureBox();
                 _captureBox.Show();
                 _captureBox.FormClosed += (s, ee) => { _captureBox = null; };
+                _captureBox.OnGestureAccepted += (s, ee) =>
+                {
+                    _captureBox.Close();
+                    configurationManager.RightGesture = ee.Gesture;
+                };
             }
+        }
+
+        private void clearLeftButton_Click(object sender, EventArgs e)
+        {
+            configurationManager.LeftGesture = null;
+        }
+
+        private void clearRightButton_Click(object sender, EventArgs e)
+        {
+            configurationManager.RightGesture = null;
         }
     }
 }

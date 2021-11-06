@@ -82,7 +82,7 @@
     <Compile Include="CaptureKeyGestureBox.Designer.cs">
       <DependentUpon>CaptureKeyGestureBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="SwapperConfiguration.cs" />
     <Compile Include="HotKeyManager.cs" />
     <Compile Include="KeyUtils.cs" />
     <Compile Include="MouseButtonManager.cs" />
