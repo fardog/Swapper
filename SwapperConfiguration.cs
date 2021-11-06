@@ -55,9 +55,7 @@ namespace Swapper
                 _rightGesture = (KeyGesture)converter.ConvertFromString(Properties.Settings.Default.RightGesture);
         }
 
-        delegate void SetProperty(string property);
-
-        private void _set(ref KeyGesture gesture, SetProperty set,  KeyGesture value)
+        private void _set(ref KeyGesture gesture, Action<string> set,  KeyGesture value)
         {
             gesture = value;
             set(value == null ? "" : value.GetDisplayStringForCurrentCulture());
