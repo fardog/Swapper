@@ -40,14 +40,19 @@ namespace Swapper
             UpdateUI(buttonManager.PrimaryButton);
         }
 
-        private void registerHotKeys()
+        private void unregisterHotKeys()
         {
             foreach(var handle in hotkeyHandles)
             {
                 keyManager.UnregisterHotKey(handle);
             }
             hotkeyHandles.Clear();
+        }
 
+        private void registerHotKeys()
+        {
+            unregisterHotKeys();
+        
             if (configurationManager.LeftGesture != null)
                 hotkeyHandles.Add(
                     keyManager.RegisterHotKey(configurationManager.LeftGesture.Modifiers, configurationManager.LeftGesture.Key));
@@ -78,9 +83,15 @@ namespace Swapper
         {
             if (optionsBox == null)
             {
+                // temporarily unregister hotkeys
+                unregisterHotKeys();
+
                 optionsBox = new OptionsBox(configurationManager);
                 optionsBox.Show();
-                optionsBox.FormClosed += (s, ee) => { optionsBox = null; };
+                optionsBox.FormClosed += (s, ee) => {
+                    registerHotKeys();
+                    optionsBox = null;
+                };
             }
         }
 
