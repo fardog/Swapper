@@ -11,6 +11,7 @@ namespace Swapper
 {
     partial class AboutBox : Form
     {
+        private static string UNKNOWN_VALUE_STRING = "UNKNOWN";
         public AboutBox()
         {
             InitializeComponent();
@@ -37,7 +38,7 @@ namespace Swapper
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location) ?? UNKNOWN_VALUE_STRING;
             }
         }
 
@@ -45,7 +46,7 @@ namespace Swapper
         {
             get
             {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? UNKNOWN_VALUE_STRING;
             }
         }
 
@@ -102,7 +103,7 @@ namespace Swapper
         }
         #endregion
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
             Close();
         }
