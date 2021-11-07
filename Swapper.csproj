@@ -26,9 +26,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".github\workflows\ci.yaml" />
   </ItemGroup>
   <ItemGroup>
