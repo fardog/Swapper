@@ -1,5 +1,6 @@
 ﻿using Swapper.Properties;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Swapper
@@ -9,6 +10,10 @@ namespace Swapper
         private readonly NotifyIcon trayIcon;
         private readonly MouseButtonManager buttonManager;
         private AboutBox aboutBox;
+        private OptionsBox optionsBox;
+        private HotKeyManager keyManager;
+        private HashSet<int> hotkeyHandles = new HashSet<int>();
+        private SwapperConfiguration configurationManager = new DynamicConfigurationManager();
 
         public Tray()
         {
@@ -17,15 +22,51 @@ namespace Swapper
             {
                 ContextMenu = new ContextMenu(new MenuItem[] {
                     new MenuItem("About", MenuItem_About),
+                    new MenuItem("Options", MenuItem_Options),
                     new MenuItem("Exit", MenuItem_Exit)
                 }),
                 Visible = true,
             };
             trayIcon.MouseClick += MouseClick;
 
+            configurationManager.OnConfigurationChange += delegate { registerHotKeys(); };
+
+            keyManager = new HotKeyManager();
+            registerHotKeys();
+            keyManager.OnKeyGesture += KeyManager_OnKeyGesture;
+
             buttonManager = new MouseButtonManager();
             buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(buttonManager.PrimaryButton);
+        }
+
+        private void unregisterHotKeys()
+        {
+            foreach(var handle in hotkeyHandles)
+            {
+                keyManager.UnregisterHotKey(handle);
+            }
+            hotkeyHandles.Clear();
+        }
+
+        private void registerHotKeys()
+        {
+            unregisterHotKeys();
+        
+            if (configurationManager.LeftGesture != null)
+                hotkeyHandles.Add(
+                    keyManager.RegisterHotKey(configurationManager.LeftGesture.Modifiers, configurationManager.LeftGesture.Key));
+            if (configurationManager.RightGesture != null)
+                hotkeyHandles.Add(
+                    keyManager.RegisterHotKey(configurationManager.RightGesture.Modifiers, configurationManager.RightGesture.Key));
+        }
+
+        private void KeyManager_OnKeyGesture(object sender, KeyGestureEventArgs e)
+        {
+            if (e.Gesture.Equivalent(configurationManager.LeftGesture))
+                buttonManager.PrimaryButton = ButtonState.Left;
+            if (e.Gesture.Equivalent(configurationManager.RightGesture))
+                buttonManager.PrimaryButton = ButtonState.Right;
         }
 
         private void MenuItem_About(object sender, EventArgs e)
@@ -35,6 +76,22 @@ namespace Swapper
                 aboutBox = new AboutBox();
                 aboutBox.Show();
                 aboutBox.FormClosed += (s, ee) => { aboutBox = null; };
+            }
+        }
+
+        private void MenuItem_Options(object sender, EventArgs e)
+        {
+            if (optionsBox == null)
+            {
+                // temporarily unregister hotkeys
+                unregisterHotKeys();
+
+                optionsBox = new OptionsBox(configurationManager);
+                optionsBox.Show();
+                optionsBox.FormClosed += (s, ee) => {
+                    registerHotKeys();
+                    optionsBox = null;
+                };
             }
         }
 
@@ -58,7 +115,7 @@ namespace Swapper
             }
         }
 
-         private void MouseClick(object sender, MouseEventArgs e)
+         private void MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 

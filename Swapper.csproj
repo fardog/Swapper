@@ -53,6 +53,7 @@
     <ApplicationIcon>Resources\TrayIconDarkLeft.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -66,6 +67,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutBox.cs">
@@ -74,7 +76,22 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="CaptureKeyGestureBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaptureKeyGestureBox.Designer.cs">
+      <DependentUpon>CaptureKeyGestureBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SwapperConfiguration.cs" />
+    <Compile Include="HotKeyManager.cs" />
+    <Compile Include="KeyUtils.cs" />
     <Compile Include="MouseButtonManager.cs" />
+    <Compile Include="OptionsBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsBox.Designer.cs">
+      <DependentUpon>OptionsBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -85,6 +102,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CaptureKeyGestureBox.resx">
+      <DependentUpon>CaptureKeyGestureBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsBox.resx">
+      <DependentUpon>OptionsBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
