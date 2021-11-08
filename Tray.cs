@@ -6,28 +6,28 @@ namespace Swapper
 {
     public class Tray: ApplicationContext
     {
-        private readonly NotifyIcon trayIcon;
-        private readonly MouseButtonManager buttonManager;
-        private AboutBox? aboutBox;
+        private readonly NotifyIcon _trayIcon;
+        private readonly MouseButtonManager _buttonManager;
+        private AboutBox? _aboutBox;
 
         public Tray()
         {
             // Initialize Tray Icon
-            trayIcon = new NotifyIcon()
+            _trayIcon = new NotifyIcon()
             {
                 ContextMenuStrip = new ContextMenuStrip(),
                 Visible = true,
             };
-            trayIcon.MouseClick += TrayItem_MouseClick;
+            _trayIcon.MouseClick += TrayItem_MouseClick;
 
             ToolStripMenuItem aboutMenuItem = new("About", null, MenuItem_About, "About");
             ToolStripMenuItem exitMenuItem = new("Exit", null, MenuItem_Exit, "Exit");
-            trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
-            trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
+            _trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
+            _trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
 
-            buttonManager = new MouseButtonManager();
-            buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
-            UpdateUI(buttonManager.PrimaryButton);
+            _buttonManager = new MouseButtonManager();
+            _buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
+            UpdateUI(_buttonManager.PrimaryButton);
         }
 
         private void ButtonManager_MouseButtonChanged(object? sender, MouseButtonChangedEventArgs e)
@@ -35,18 +35,18 @@ namespace Swapper
             UpdateUI(e.PrimaryButton);
         }
 
-       private void UpdateUI(ButtonState primaryButton)
+        private void UpdateUI(ButtonState primaryButton)
         {
             if (primaryButton == ButtonState.Left)
             {
-                trayIcon.Text = "Primary Button: Left";
-                trayIcon.Icon = Resources.TrayIconDarkLeft;
+                _trayIcon.Text = "Primary Button: Left";
+                _trayIcon.Icon = Resources.TrayIconDarkLeft;
             }
             else if (primaryButton == ButtonState.Right)
             {
                 
-                trayIcon.Text = "Primary Button: Right";
-                trayIcon.Icon = Resources.TrayIconDarkRight;
+                _trayIcon.Text = "Primary Button: Right";
+                _trayIcon.Icon = Resources.TrayIconDarkRight;
             }
         }
 
@@ -54,22 +54,22 @@ namespace Swapper
         {
             if (e.Button != MouseButtons.Left) return;
 
-            buttonManager.Swap();
+            _buttonManager.Swap();
         }
 
         private void MenuItem_About(object? sender, EventArgs e)
         {
-            if (aboutBox == null)
+            if (_aboutBox == null)
             {
-                aboutBox = new AboutBox();
-                aboutBox.Show();
-                aboutBox.FormClosed += (s, ee) => { aboutBox = null; };
+                _aboutBox = new AboutBox();
+                _aboutBox.Show();
+                _aboutBox.FormClosed += (s, ee) => { _aboutBox = null; };
             }
         }
 
-        void MenuItem_Exit(object? sender, EventArgs e)
+        private void MenuItem_Exit(object? sender, EventArgs e)
         {
-            trayIcon.Visible = false;
+            _trayIcon.Visible = false;
             Application.Exit();
         }
     }

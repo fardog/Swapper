@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Swapper
 {
     partial class AboutBox : Form
     {
-        private static string UNKNOWN_VALUE_STRING = "UNKNOWN";
+        private static readonly string UNKNOWN_VALUE_STRING = "UNKNOWN";
+
         public AboutBox()
         {
             InitializeComponent();
@@ -25,7 +21,7 @@ namespace Swapper
 
         #region Assembly Attribute Accessors
 
-        public string AssemblyTitle
+        public static string AssemblyTitle
         {
             get
             {
@@ -42,7 +38,7 @@ namespace Swapper
             }
         }
 
-        public string AssemblyVersion
+        public static string AssemblyVersion
         {
             get
             {
@@ -50,7 +46,7 @@ namespace Swapper
             }
         }
 
-        public string AssemblyDescription
+        public static string AssemblyDescription
         {
             get
             {
@@ -63,7 +59,7 @@ namespace Swapper
             }
         }
 
-        public string AssemblyProduct
+        public static string AssemblyProduct
         {
             get
             {
@@ -76,7 +72,7 @@ namespace Swapper
             }
         }
 
-        public string AssemblyCopyright
+        public static string AssemblyCopyright
         {
             get
             {
@@ -89,7 +85,7 @@ namespace Swapper
             }
         }
 
-        public string AssemblyCompany
+        public static string AssemblyCompany
         {
             get
             {

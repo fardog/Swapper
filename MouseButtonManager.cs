@@ -24,12 +24,12 @@ namespace Swapper
 
     public class MouseButtonManager
     {
-        private ButtonState primaryButton;
+        private ButtonState _primaryButton;
 
         public event EventHandler<MouseButtonChangedEventArgs> MouseButtonChanged = delegate { };
 
         [DllImport("user32.dll")]
-        public static extern bool SwapMouseButton(bool bSwap);
+        private static extern bool SwapMouseButton(bool bSwap);
 
         public MouseButtonManager()
         {
@@ -48,7 +48,7 @@ namespace Swapper
         {
             get
             {
-                return primaryButton;
+                return _primaryButton;
             }
             set
             {
@@ -61,7 +61,7 @@ namespace Swapper
                     SwapMouseButton(true);
                 }
 
-                primaryButton = value;
+                _primaryButton = value;
                 MouseButtonChanged?.Invoke(this, new MouseButtonChangedEventArgs(value));
             }
         }
