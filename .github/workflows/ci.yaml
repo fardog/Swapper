@@ -14,18 +14,12 @@ jobs:
 
     runs-on: windows-latest
 
-    env:
-      Solution_Path: Swapper.sln
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1
-
     - name: Build solution
-      run: msbuild $env:Solution_Path /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+      run: dotnet build --configuration Release
       env:
         Configuration: Debug
         RuntimeIdentifier: win-${{ matrix.targetplatform }}
