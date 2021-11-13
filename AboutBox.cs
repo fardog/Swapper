@@ -11,9 +11,9 @@ namespace Swapper
         public AboutBox()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
+            this.Text = $"About {AssemblyTitle}";
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            this.labelVersion.Text = $"Version {AssemblyVersion}";
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
@@ -34,7 +34,7 @@ namespace Swapper
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location) ?? UNKNOWN_VALUE_STRING;
+                return UNKNOWN_VALUE_STRING;
             }
         }
 

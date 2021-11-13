@@ -1,4 +1,4 @@
-﻿name:  Debug Build
+﻿name: Build Smoke Test
 
 on:
   push:
@@ -19,12 +19,13 @@ jobs:
       env:
         Configuration: Release
 
+    # these do not actually publish anything; they are just ensuring the publish
+    # profiles are working
     - name: Publish (x64)
       run: dotnet publish
       env:
         Configuration: Release
         PublishProfile: folder-x64
-
     - name: Publish (x86)
       run: dotnet publish
       env:
