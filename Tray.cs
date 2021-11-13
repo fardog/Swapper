@@ -1,14 +1,19 @@
 ﻿using Swapper.Properties;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Swapper
 {
     public class Tray: ApplicationContext
     {
+        private readonly HotKeyManager _hotkeyManager = new();
         private readonly NotifyIcon _trayIcon;
         private readonly MouseButtonManager _buttonManager;
         private AboutBox? _aboutBox;
+
+        private HotKey _leftHotKey = new HotKey(Modifiers.Control | Modifiers.Shift, Keys.Left);
+        private HotKey _rightHotKey = new HotKey(Modifiers.Control | Modifiers.Shift, Keys.Right);
 
         public Tray()
         {
@@ -28,6 +33,18 @@ namespace Swapper
             _buttonManager = new MouseButtonManager();
             _buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(_buttonManager.PrimaryButton);
+
+            _hotkeyManager.HotKeyPressed += _hotkeyManager_HotKeyPressed;
+            _hotkeyManager.RegisterHotKey(Modifiers.Control | Modifiers.Shift, Keys.Left);
+            _hotkeyManager.RegisterHotKey(Modifiers.Control | Modifiers.Shift, Keys.Right);
+        }
+
+        private void _hotkeyManager_HotKeyPressed(object? sender, HotKeyEventArgs e)
+        {
+            if (e.HotKey == _leftHotKey)
+                _buttonManager.PrimaryButton = ButtonState.Left;
+            if (e.HotKey == _rightHotKey)
+                _buttonManager.PrimaryButton = ButtonState.Right;
         }
 
         private void ButtonManager_MouseButtonChanged(object? sender, MouseButtonChangedEventArgs e)
