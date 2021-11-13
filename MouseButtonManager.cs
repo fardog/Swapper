@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿#pragma warning disable CA1416 // Validate platform compatibility
+using Microsoft.Win32;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -23,12 +24,12 @@ namespace Swapper
 
     public class MouseButtonManager
     {
-        private ButtonState primaryButton;
+        private ButtonState _primaryButton;
 
-        public event EventHandler<MouseButtonChangedEventArgs> MouseButtonChanged;
+        public event EventHandler<MouseButtonChangedEventArgs> MouseButtonChanged = delegate { };
 
         [DllImport("user32.dll")]
-        public static extern bool SwapMouseButton(bool bSwap);
+        private static extern bool SwapMouseButton(bool bSwap);
 
         public MouseButtonManager()
         {
@@ -47,7 +48,7 @@ namespace Swapper
         {
             get
             {
-                return primaryButton;
+                return _primaryButton;
             }
             set
             {
@@ -60,13 +61,13 @@ namespace Swapper
                     SwapMouseButton(true);
                 }
 
-                primaryButton = value;
+                _primaryButton = value;
                 MouseButtonChanged?.Invoke(this, new MouseButtonChangedEventArgs(value));
             }
         }
 
 
-        private void System_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        private void System_UserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs e)
         {
             if (e.Category == UserPreferenceCategory.Mouse)
             {
@@ -80,3 +81,4 @@ namespace Swapper
         }
     }
 }
+#pragma warning restore CA1416 // Validate platform compatibility

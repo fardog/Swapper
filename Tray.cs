@@ -6,68 +6,70 @@ namespace Swapper
 {
     public class Tray: ApplicationContext
     {
-        private readonly NotifyIcon trayIcon;
-        private readonly MouseButtonManager buttonManager;
-        private AboutBox aboutBox;
+        private readonly NotifyIcon _trayIcon;
+        private readonly MouseButtonManager _buttonManager;
+        private AboutBox? _aboutBox;
 
         public Tray()
         {
             // Initialize Tray Icon
-            trayIcon = new NotifyIcon()
+            _trayIcon = new NotifyIcon()
             {
-                ContextMenu = new ContextMenu(new MenuItem[] {
-                    new MenuItem("About", MenuItem_About),
-                    new MenuItem("Exit", MenuItem_Exit)
-                }),
+                ContextMenuStrip = new ContextMenuStrip(),
                 Visible = true,
             };
-            trayIcon.MouseClick += MouseClick;
+            _trayIcon.MouseClick += TrayItem_MouseClick;
 
-            buttonManager = new MouseButtonManager();
-            buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
-            UpdateUI(buttonManager.PrimaryButton);
+            ToolStripMenuItem aboutMenuItem = new("About", null, MenuItem_About, "About");
+            ToolStripMenuItem exitMenuItem = new("Exit", null, MenuItem_Exit, "Exit");
+            _trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
+            _trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
+
+            _buttonManager = new MouseButtonManager();
+            _buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
+            UpdateUI(_buttonManager.PrimaryButton);
         }
 
-        private void MenuItem_About(object sender, EventArgs e)
-        {
-            if (aboutBox == null)
-            {
-                aboutBox = new AboutBox();
-                aboutBox.Show();
-                aboutBox.FormClosed += (s, ee) => { aboutBox = null; };
-            }
-        }
-
-        private void ButtonManager_MouseButtonChanged(object sender, MouseButtonChangedEventArgs e)
+        private void ButtonManager_MouseButtonChanged(object? sender, MouseButtonChangedEventArgs e)
         {
             UpdateUI(e.PrimaryButton);
         }
 
-       private void UpdateUI(ButtonState primaryButton)
+        private void UpdateUI(ButtonState primaryButton)
         {
             if (primaryButton == ButtonState.Left)
             {
-                trayIcon.Text = "Primary Button: Left";
-                trayIcon.Icon = Resources.TrayIconDarkLeft;
+                _trayIcon.Text = "Primary Button: Left";
+                _trayIcon.Icon = Resources.TrayIconDarkLeft;
             }
             else if (primaryButton == ButtonState.Right)
             {
                 
-                trayIcon.Text = "Primary Button: Right";
-                trayIcon.Icon = Resources.TrayIconDarkRight;
+                _trayIcon.Text = "Primary Button: Right";
+                _trayIcon.Icon = Resources.TrayIconDarkRight;
             }
         }
 
-         private void MouseClick(object sender, MouseEventArgs e)
+        private void TrayItem_MouseClick(object? sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
-            buttonManager.Swap();
+            _buttonManager.Swap();
         }
 
-        void MenuItem_Exit(object sender, EventArgs e)
+        private void MenuItem_About(object? sender, EventArgs e)
         {
-            trayIcon.Visible = false;
+            if (_aboutBox == null)
+            {
+                _aboutBox = new AboutBox();
+                _aboutBox.Show();
+                _aboutBox.FormClosed += (s, ee) => { _aboutBox = null; };
+            }
+        }
+
+        private void MenuItem_Exit(object? sender, EventArgs e)
+        {
+            _trayIcon.Visible = false;
             Application.Exit();
         }
     }

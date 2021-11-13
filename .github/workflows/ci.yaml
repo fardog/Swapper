@@ -1,31 +1,33 @@
-﻿name:  Debug Build
+﻿name: Build Smoke Test
 
 on:
   push:
     branches:
-      - master
+    - master
   pull_request:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        targetplatform: [x86, x64]
-
     runs-on: windows-latest
-
-    env:
-      Solution_Path: Swapper.sln
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1
-
     - name: Build solution
-      run: msbuild $env:Solution_Path /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+      run: dotnet build
       env:
-        Configuration: Debug
-        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+        Configuration: Release
+
+    # these do not actually publish anything; they are just ensuring the publish
+    # profiles are working
+    - name: Publish (x64)
+      run: dotnet publish
+      env:
+        Configuration: Release
+        PublishProfile: folder-x64
+    - name: Publish (x86)
+      run: dotnet publish
+      env:
+        Configuration: Release
+        PublishProfile: folder-x86
