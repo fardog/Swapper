@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - master
+    - master
   pull_request:
 
 jobs:
@@ -17,4 +17,16 @@ jobs:
     - name: Build solution
       run: dotnet build
       env:
-        Configuration: Debug
+        Configuration: Release
+
+    - name: Publish (x64)
+      run: dotnet publish
+      env:
+        Configuration: Release
+        PublishProfile: folder-x64
+
+    - name: Publish (x86)
+      run: dotnet publish
+      env:
+        Configuration: Release
+        PublishProfile: folder-x86
