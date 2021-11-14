@@ -22,5 +22,29 @@ namespace Swapper.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HotKey_LeftPrimary {
+            get {
+                return ((string)(this["HotKey_LeftPrimary"]));
+            }
+            set {
+                this["HotKey_LeftPrimary"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HotKey_RightPrimary {
+            get {
+                return ((string)(this["HotKey_RightPrimary"]));
+            }
+            set {
+                this["HotKey_RightPrimary"] = value;
+            }
+        }
     }
 }

@@ -108,14 +108,14 @@ namespace Swapper
             return Modifiers.GetHashCode() + Key.GetHashCode();
         }
 
-        public static bool operator ==(HotKey a, HotKey b)
+        public static bool operator ==(HotKey? a, HotKey? b)
         {
-            return a.Equals(b);
+            return a?.Equals(b) ?? false;
         }
 
-        public static bool operator !=(HotKey a, HotKey b)
+        public static bool operator !=(HotKey? a, HotKey? b)
         {
-            return !a.Equals(b);
+            return !a?.Equals(b) ?? false;
         }
     }
 
