@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace Swapper
 {
+    [Flags]
     public enum Modifiers
     {
         Alt = 0x0001,
@@ -17,7 +18,8 @@ namespace Swapper
 
     public static class ModifiersConversion
     {
-        private static Dictionary<string, Modifiers> _modifiers = new Dictionary<string, Modifiers>{
+        private static readonly Dictionary<string, Modifiers> _modifiers = new()
+        {
             { "alt", Modifiers.Alt },
             { "control", Modifiers.Control },
             { "ctrl", Modifiers.Control },
@@ -134,19 +136,19 @@ namespace Swapper
     public class HotKeyManager : IDisposable
     {
         [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
         [DllImport("user32.dll")]
-        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        private HiddenWindow _window = new();
+        private readonly HiddenWindow _window = new();
         private int _currentId;
 
         public event EventHandler<HotKeyEventArgs> HotKeyPressed = delegate { };
 
         public class HiddenWindow : NativeWindow, IDisposable
         {
-            private static int WM_HOTKEY = 0x0312;
+            private static readonly int WM_HOTKEY = 0x0312;
 
             public event EventHandler<HotKeyEventArgs> HotKeyPressed = delegate { };
 
@@ -170,8 +172,8 @@ namespace Swapper
 
             public void Dispose()
             {
-                GC.SuppressFinalize(this); // TODO: verify this
                 DestroyHandle();
+                GC.SuppressFinalize(this);
             }
         }
 
@@ -202,13 +204,13 @@ namespace Swapper
 
         public void Dispose()
         {
-            GC.SuppressFinalize(this); // TODO: verify this
             for (int i = _currentId; i > 0; i--)
             {
                 UnregisterHotKey(_window.Handle, i);
             }
 
             _window.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
