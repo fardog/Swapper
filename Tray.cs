@@ -1,11 +1,15 @@
 ﻿using Swapper.Properties;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Swapper
 {
     public class Tray: ApplicationContext
     {
+        private readonly ISwapperConfiguration _configurationManager;
+        private readonly HotKeyManager _hotkeyManager = new();
+        private readonly HashSet<int> _hotkeyHandles = new();
         private readonly NotifyIcon _trayIcon;
         private readonly MouseButtonManager _buttonManager;
         private AboutBox? _aboutBox;
@@ -28,6 +32,63 @@ namespace Swapper
             _buttonManager = new MouseButtonManager();
             _buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(_buttonManager.PrimaryButton);
+
+            try
+            {
+                _configurationManager = new ConfigurationManager();
+            }
+            catch (InvalidConfigurationValueException e)
+            {
+                MessageBox.Show($"Unable to load configuration, resetting to defaults. Error was:\n\n{e.Message}");
+                ConfigurationManager.Reset();
+                _configurationManager = new ConfigurationManager();
+            }
+
+            _configurationManager.ConfigurationChange += _configurationManager_ConfigurationChange;
+
+            _hotkeyManager.HotKeyPressed += _hotkeyManager_HotKeyPressed;
+            RegisterHotKeys();
+        }
+
+        private void _configurationManager_ConfigurationChange(object? sender, EventArgs e)
+        {
+            RegisterHotKeys();
+        }
+
+        private void UnregisterHotKeys()
+        {
+            foreach(var handle in _hotkeyHandles)
+            {
+                _hotkeyManager.UnregisterHotKey(handle);
+            }
+            _hotkeyHandles.Clear();
+        }
+
+        private void RegisterHotKeys()
+        {
+            UnregisterHotKeys();
+
+            if (_configurationManager.HotKeyLeftPrimary != null)
+                AddHotKey(_configurationManager.HotKeyLeftPrimary);
+            if (_configurationManager.HotKeyRightPrimary != null)
+                AddHotKey(_configurationManager.HotKeyRightPrimary);
+            if (_configurationManager.HotKeySwapPrimary != null)
+                AddHotKey(_configurationManager.HotKeySwapPrimary);
+        }
+
+        private void AddHotKey(HotKey hotKey)
+        {
+            _hotkeyHandles.Add(_hotkeyManager.RegisterHotKey(hotKey.Modifiers, hotKey.Key));
+        }
+
+        private void _hotkeyManager_HotKeyPressed(object? sender, HotKeyEventArgs e)
+        {
+            if (e.HotKey == _configurationManager.HotKeyLeftPrimary)
+                _buttonManager.PrimaryButton = ButtonState.Left;
+            if (e.HotKey == _configurationManager.HotKeyRightPrimary)
+                _buttonManager.PrimaryButton = ButtonState.Right;
+            if (e.HotKey == _configurationManager.HotKeySwapPrimary)
+                _buttonManager.Swap();
         }
 
         private void ButtonManager_MouseButtonChanged(object? sender, MouseButtonChangedEventArgs e)
