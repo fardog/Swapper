@@ -10,8 +10,8 @@ namespace Swapper
     public interface ISwapperConfiguration
     {
         HotKey? HotKeyLeftPrimary { get; set; }
-
         HotKey? HotKeyRightPrimary { get; set; }
+        HotKey? HotKeySwapPrimary { get; set; }
 
         event EventHandler ConfigurationChange;
     }
@@ -20,9 +20,11 @@ namespace Swapper
     {
         private HotKey? _hotKeyLeftPrimary;
         private HotKey? _hotKeyRightPrimary;
+        private HotKey? _hotKeySwapPrimary;
 
         public HotKey? HotKeyLeftPrimary { get => _hotKeyLeftPrimary; set => SetHotKey(ref _hotKeyLeftPrimary, (s) => Properties.Settings.Default.HotKey_LeftPrimary = s, value); }
         public HotKey? HotKeyRightPrimary { get => _hotKeyRightPrimary; set => SetHotKey(ref _hotKeyRightPrimary, (s) => Properties.Settings.Default.HotKey_RightPrimary = s, value); }
+        public HotKey? HotKeySwapPrimary { get => _hotKeySwapPrimary; set => SetHotKey(ref _hotKeySwapPrimary, (s) => Properties.Settings.Default.HotKey_SwapPrimary = s, value); }
 
         public event EventHandler ConfigurationChange = delegate { };
 
@@ -34,8 +36,10 @@ namespace Swapper
             ConfigurationChange(this, new EventArgs());
         }
 
-        private static HotKey LoadHotKey(string value)
+        private static HotKey? LoadHotKey(string value)
         {
+            if (value == "") return null;
+
             try
             {
                 return new HotKey(value);
@@ -48,10 +52,9 @@ namespace Swapper
 
         public ConfigurationManager()
         {
-            if (Properties.Settings.Default.HotKey_LeftPrimary != "")
-                _hotKeyLeftPrimary = LoadHotKey(Properties.Settings.Default.HotKey_LeftPrimary);
-            if (Properties.Settings.Default.HotKey_RightPrimary != "")
-                _hotKeyRightPrimary = LoadHotKey(Properties.Settings.Default.HotKey_RightPrimary);
+            _hotKeyLeftPrimary = LoadHotKey(Properties.Settings.Default.HotKey_LeftPrimary);
+            _hotKeyRightPrimary = LoadHotKey(Properties.Settings.Default.HotKey_RightPrimary);
+            _hotKeySwapPrimary = LoadHotKey(Properties.Settings.Default.HotKey_SwapPrimary);
         }
 
         public static void Reset()

@@ -8,5 +8,8 @@
     <Setting Name="HotKey_RightPrimary" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="HotKey_SwapPrimary" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

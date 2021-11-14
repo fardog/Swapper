@@ -70,11 +70,16 @@ namespace Swapper
             UnregisterHotKeys();
 
             if (_configurationManager.HotKeyLeftPrimary != null)
-                _hotkeyHandles.Add(
-                    _hotkeyManager.RegisterHotKey(_configurationManager.HotKeyLeftPrimary.Modifiers, _configurationManager.HotKeyLeftPrimary.Key));
+                AddHotKey(_configurationManager.HotKeyLeftPrimary);
             if (_configurationManager.HotKeyRightPrimary != null)
-                _hotkeyHandles.Add(
-                    _hotkeyManager.RegisterHotKey(_configurationManager.HotKeyRightPrimary.Modifiers, _configurationManager.HotKeyRightPrimary.Key));
+                AddHotKey(_configurationManager.HotKeyRightPrimary);
+            if (_configurationManager.HotKeySwapPrimary != null)
+                AddHotKey(_configurationManager.HotKeySwapPrimary);
+        }
+
+        private void AddHotKey(HotKey hotKey)
+        {
+            _hotkeyHandles.Add(_hotkeyManager.RegisterHotKey(hotKey.Modifiers, hotKey.Key));
         }
 
         private void _hotkeyManager_HotKeyPressed(object? sender, HotKeyEventArgs e)
@@ -83,6 +88,8 @@ namespace Swapper
                 _buttonManager.PrimaryButton = ButtonState.Left;
             if (e.HotKey == _configurationManager.HotKeyRightPrimary)
                 _buttonManager.PrimaryButton = ButtonState.Right;
+            if (e.HotKey == _configurationManager.HotKeySwapPrimary)
+                _buttonManager.Swap();
         }
 
         private void ButtonManager_MouseButtonChanged(object? sender, MouseButtonChangedEventArgs e)

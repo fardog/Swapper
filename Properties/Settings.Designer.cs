@@ -46,5 +46,17 @@ namespace Swapper.Properties {
                 this["HotKey_RightPrimary"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HotKey_SwapPrimary {
+            get {
+                return ((string)(this["HotKey_SwapPrimary"]));
+            }
+            set {
+                this["HotKey_SwapPrimary"] = value;
+            }
+        }
     }
 }
