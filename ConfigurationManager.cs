@@ -2,6 +2,11 @@
 
 namespace Swapper
 {
+    class InvalidConfigurationValueException : Exception
+    {
+        public InvalidConfigurationValueException(string? message) : base(message) { }
+    }
+
     public interface ISwapperConfiguration
     {
         HotKey? HotKeyLeftPrimary { get; set; }
@@ -29,12 +34,29 @@ namespace Swapper
             ConfigurationChange(this, new EventArgs());
         }
 
+        private static HotKey LoadHotKey(string value)
+        {
+            try
+            {
+                return new HotKey(value);
+            }
+            catch (ArgumentException)
+            {
+                throw new InvalidConfigurationValueException($"invalid hotkey configuration value: {value}");
+            }
+        }
+
         public ConfigurationManager()
         {
             if (Properties.Settings.Default.HotKey_LeftPrimary != "")
-                _hotKeyLeftPrimary = new HotKey(Properties.Settings.Default.HotKey_LeftPrimary);
+                _hotKeyLeftPrimary = LoadHotKey(Properties.Settings.Default.HotKey_LeftPrimary);
             if (Properties.Settings.Default.HotKey_RightPrimary != "")
-                _hotKeyRightPrimary = new HotKey(Properties.Settings.Default.HotKey_RightPrimary);
+                _hotKeyRightPrimary = LoadHotKey(Properties.Settings.Default.HotKey_RightPrimary);
+        }
+
+        public static void Reset()
+        {
+            Properties.Settings.Default.Reset();
         }
     }
 }

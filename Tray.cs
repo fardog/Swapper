@@ -34,7 +34,17 @@ namespace Swapper
             _buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
             UpdateUI(_buttonManager.PrimaryButton);
 
-            _configurationManager = new ConfigurationManager();
+            try
+            {
+                _configurationManager = new ConfigurationManager();
+            }
+            catch (InvalidConfigurationValueException e)
+            {
+                MessageBox.Show($"Unable to load configuration, resetting to defaults. Error was:\n\n{e.Message}");
+                ConfigurationManager.Reset();
+                _configurationManager = new ConfigurationManager();
+            }
+
             _configurationManager.ConfigurationChange += _configurationManager_ConfigurationChange;
 
             _hotkeyManager.HotKeyPressed += _hotkeyManager_HotKeyPressed;
