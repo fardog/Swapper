@@ -16,7 +16,6 @@ namespace Swapper
 
         public Tray()
         {
-
             // Initialize Tray Icon
             _trayIcon = new NotifyIcon()
             {
