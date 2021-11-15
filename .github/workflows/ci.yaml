@@ -18,7 +18,12 @@ jobs:
       run: dotnet build
       working-directory: ./Swapper
       env:
-        Configuration: Release
+        Configuration: Debug
+
+    - name: Run tests
+      run: dotnet test
+      env:
+        Configuration: Debug
 
     # these do not actually publish anything; they are just ensuring the publish
     # profiles are working
