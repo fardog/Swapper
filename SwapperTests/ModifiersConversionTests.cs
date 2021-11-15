@@ -7,12 +7,6 @@ namespace Swapper.Tests
     public class ModifiersConversionTests
     {
         [TestMethod()]
-        public void FailTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void FromStringTest()
         {
             string modifierRepr = "Ctrl";
