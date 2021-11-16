@@ -16,7 +16,17 @@ namespace Swapper
         }
     }
 
-    public class HotKeyManager : IDisposable
+    public interface IHotKeyManager
+    {
+        int RegisterHotKey(HotKey hotKey);
+        int RegisterHotKey(Modifiers modifiers, Keys key);
+
+        void UnregisterHotKey(int handle);
+
+        event EventHandler<HotKeyEventArgs> HotKeyPressed;
+    }
+
+    public class HotKeyManager : IDisposable, IHotKeyManager
     {
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -60,9 +70,9 @@ namespace Swapper
             }
         }
 
-        public HotKeyManager() => _window.HotKeyPressed += _window_OnKeyGesture;
+        public HotKeyManager() => _window.HotKeyPressed += Window_OnKeyGesture;
 
-        private void _window_OnKeyGesture(object? sender, HotKeyEventArgs e)
+        private void Window_OnKeyGesture(object? sender, HotKeyEventArgs e)
         {
             HotKeyPressed.Invoke(this, e);
         }

@@ -22,7 +22,15 @@ namespace Swapper
         }
     }
 
-    public class MouseButtonManager
+    public interface IMouseButtonManager
+    {
+        ButtonState PrimaryButton { get; set; }
+        void Swap();
+
+        event EventHandler<MouseButtonChangedEventArgs> MouseButtonChanged;
+    }
+
+    public class MouseButtonManager : IMouseButtonManager
     {
         private ButtonState _primaryButton;
 
