@@ -14,7 +14,7 @@ namespace Swapper
             Application.EnableVisualStyles();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Tray());
+            Application.Run(new SwapperApplication());
         }
     }
 }
