@@ -21,7 +21,7 @@ namespace Swapper
         public event EventHandler AboutClicked = delegate { };
         public event EventHandler ExitClicked = delegate { };
 
-        public Tray(ButtonState buttonState)
+        public Tray()
         {
             // Initialize Tray Icon
             _trayIcon = new NotifyIcon()
@@ -35,8 +35,6 @@ namespace Swapper
             ToolStripMenuItem exitMenuItem = new("Exit", null, MenuItem_Exit, "Exit");
             _trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
             _trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
-
-            SetPrimaryButton(buttonState);
         }
 
         private void TrayItem_MouseClick(object? sender, MouseEventArgs e)

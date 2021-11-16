@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swapper;
+using System;
 using System.Windows.Forms;
 
 namespace Swapper
@@ -14,7 +15,7 @@ namespace Swapper
             Application.EnableVisualStyles();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SwapperApplication());
+            Application.Run(new SwapperApplicationContext());
         }
     }
 }

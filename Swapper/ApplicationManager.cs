@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace Swapper
 {
-    public class SwapperApplication: ApplicationContext
+    class ApplicationManager
     {
         private readonly ISwapperConfiguration _configurationManager;
         private readonly IMouseButtonManager _buttonManager;
-        private readonly IHotKeyManager _hotkeyManager = new HotKeyManager();
+        private readonly IHotKeyManager _hotkeyManager;
         private readonly ITray _tray;
         private readonly HashSet<int> _hotkeyHandles = new();
         private AboutBox? _aboutBox;
 
-        public SwapperApplication()
+        public event EventHandler ApplicationExit = delegate { };
+
+        public ApplicationManager(
+            ISwapperConfiguration configurationManager,
+            IMouseButtonManager buttonManager,
+            IHotKeyManager hotKeyManager,
+            ITray tray)
         {
-            _buttonManager = new MouseButtonManager();
+            _buttonManager = buttonManager;
             _buttonManager.MouseButtonChanged += ButtonManager_MouseButtonChanged;
 
-            _tray = new Tray(_buttonManager.PrimaryButton);
+            _tray = tray;
+            _tray.SetPrimaryButton(_buttonManager.PrimaryButton);
             _tray.ButtonSwapClicked += Tray_ButtonSwapClicked;
             _tray.AboutClicked += Tray_AboutClicked;
             _tray.ExitClicked += Tray_ExitClicked;
 
-            try
-            {
-                _configurationManager = new ConfigurationManager();
-            }
-            catch (InvalidConfigurationValueException e)
-            {
-                MessageBox.Show($"Unable to load configuration, resetting to defaults. Error was:\n\n{e.Message}");
-                ConfigurationManager.Reset();
-                _configurationManager = new ConfigurationManager();
-            }
-
+            _configurationManager = configurationManager;
             _configurationManager.ConfigurationChange += ConfigurationManager_ConfigurationChange;
 
+            _hotkeyManager = hotKeyManager;
             _hotkeyManager.HotKeyPressed += HotKeyManager_HotKeyPressed;
             RegisterHotKeys();
         }
@@ -103,7 +100,7 @@ namespace Swapper
 
         private void Tray_ExitClicked(object? sender, EventArgs e)
         {
-            Application.Exit();
+            ApplicationExit.Invoke(this, new EventArgs());
         }
     }
 }
