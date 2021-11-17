@@ -1,5 +1,4 @@
-﻿using Swapper.Properties;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Swapper
@@ -31,8 +30,8 @@ namespace Swapper
             };
             _trayIcon.MouseClick += TrayItem_MouseClick;
 
-            ToolStripMenuItem aboutMenuItem = new("About", null, MenuItem_About, "About");
-            ToolStripMenuItem exitMenuItem = new("Exit", null, MenuItem_Exit, "Exit");
+            ToolStripMenuItem aboutMenuItem = new(Resources.en_US.TrayMenuItem_About, null, MenuItem_About, "About");
+            ToolStripMenuItem exitMenuItem = new(Resources.en_US.TrayMenuItem_Exit, null, MenuItem_Exit, "Exit");
             _trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
             _trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
         }
@@ -58,14 +57,14 @@ namespace Swapper
         {
             if (buttonState == ButtonState.Left)
             {
-                _trayIcon.Text = "Primary Button: Left";
-                _trayIcon.Icon = Resources.TrayIconDarkLeft;
+                _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonLeft;
+                _trayIcon.Icon = Resources.Global.TrayIconDarkLeft;
             }
             else if (buttonState == ButtonState.Right)
             {
                 
-                _trayIcon.Text = "Primary Button: Right";
-                _trayIcon.Icon = Resources.TrayIconDarkRight;
+                _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonRight;
+                _trayIcon.Icon = Resources.Global.TrayIconDarkRight;
             }
         }
 

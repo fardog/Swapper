@@ -15,7 +15,7 @@ namespace Swapper
             }
             catch (InvalidConfigurationValueException e)
             {
-                MessageBox.Show($"Unable to load configuration, resetting to defaults. Error was:\n\n{e.Message}");
+                MessageBox.Show(string.Format(Resources.en_US.ErrorMessage_LoadingConfiguration, e.Message));
                 ConfigurationManager.Reset();
                 configurationManager = new ConfigurationManager();
             }
