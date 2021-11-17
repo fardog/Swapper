@@ -20,6 +20,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\TrayIconDarkLeft.ico</ApplicationIcon>
