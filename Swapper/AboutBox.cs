@@ -5,7 +5,7 @@ using Swapper.Resources;
 
 namespace Swapper;
 
-partial class AboutBox : Form
+internal partial class AboutBox : Form
 {
     private const string UNKNOWN_VALUE_STRING = "UNKNOWN";
 
