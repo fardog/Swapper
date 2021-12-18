@@ -1,76 +1,74 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Swapper
-{
-    public interface ITray
-    {
-        void SetPrimaryButton(ButtonState buttonState);
+namespace Swapper;
 
-        event EventHandler ButtonSwapClicked;
-        event EventHandler AboutClicked;
-        event EventHandler ExitClicked;
+public interface ITray
+{
+    void SetPrimaryButton(ButtonState buttonState);
+
+    event EventHandler ButtonSwapClicked;
+    event EventHandler AboutClicked;
+    event EventHandler ExitClicked;
+}
+
+internal class Tray : ITray, IDisposable
+{
+    private readonly NotifyIcon _trayIcon;
+
+    public event EventHandler ButtonSwapClicked = delegate { };
+    public event EventHandler AboutClicked = delegate { };
+    public event EventHandler ExitClicked = delegate { };
+
+    public Tray()
+    {
+        // Initialize Tray Icon
+        _trayIcon = new NotifyIcon
+        {
+            ContextMenuStrip = new ContextMenuStrip(),
+            Visible = true
+        };
+        _trayIcon.MouseClick += TrayItem_MouseClick;
+
+        ToolStripMenuItem aboutMenuItem = new(Resources.en_US.TrayMenuItem_About, null, MenuItem_About, "About");
+        ToolStripMenuItem exitMenuItem = new(Resources.en_US.TrayMenuItem_Exit, null, MenuItem_Exit, "Exit");
+        _trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
+        _trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
     }
 
-    class Tray : ITray, IDisposable
+    private void TrayItem_MouseClick(object? sender, MouseEventArgs e)
     {
-        private readonly NotifyIcon _trayIcon;
+        if (e.Button != MouseButtons.Left) return;
 
-        public event EventHandler ButtonSwapClicked = delegate { };
-        public event EventHandler AboutClicked = delegate { };
-        public event EventHandler ExitClicked = delegate { };
+        ButtonSwapClicked.Invoke(this, EventArgs.Empty);
+    }
 
-        public Tray()
+    private void MenuItem_About(object? sender, EventArgs e)
+    {
+        AboutClicked.Invoke(this, EventArgs.Empty);
+    }
+
+    private void MenuItem_Exit(object? sender, EventArgs e)
+    {
+        ExitClicked.Invoke(this, EventArgs.Empty);
+    }
+
+    public void SetPrimaryButton(ButtonState buttonState)
+    {
+        if (buttonState == ButtonState.Left)
         {
-            // Initialize Tray Icon
-            _trayIcon = new NotifyIcon()
-            {
-                ContextMenuStrip = new ContextMenuStrip(),
-                Visible = true,
-            };
-            _trayIcon.MouseClick += TrayItem_MouseClick;
-
-            ToolStripMenuItem aboutMenuItem = new(Resources.en_US.TrayMenuItem_About, null, MenuItem_About, "About");
-            ToolStripMenuItem exitMenuItem = new(Resources.en_US.TrayMenuItem_Exit, null, MenuItem_Exit, "Exit");
-            _trayIcon.ContextMenuStrip.Items.Add(aboutMenuItem);
-            _trayIcon.ContextMenuStrip.Items.Add(exitMenuItem);
+            _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonLeft;
+            _trayIcon.Icon = Resources.Global.TrayIconDarkLeft;
         }
-
-        private void TrayItem_MouseClick(object? sender, MouseEventArgs e)
+        else if (buttonState == ButtonState.Right)
         {
-            if (e.Button != MouseButtons.Left) return;
-
-            ButtonSwapClicked.Invoke(this, new EventArgs());
+            _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonRight;
+            _trayIcon.Icon = Resources.Global.TrayIconDarkRight;
         }
+    }
 
-        private void MenuItem_About(object? sender, EventArgs e)
-        {
-            AboutClicked.Invoke(this, new EventArgs());
-        }
-
-        private void MenuItem_Exit(object? sender, EventArgs e)
-        {
-            ExitClicked.Invoke(this, new EventArgs());
-        }
-
-        public void SetPrimaryButton(ButtonState buttonState)
-        {
-            if (buttonState == ButtonState.Left)
-            {
-                _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonLeft;
-                _trayIcon.Icon = Resources.Global.TrayIconDarkLeft;
-            }
-            else if (buttonState == ButtonState.Right)
-            {
-                
-                _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonRight;
-                _trayIcon.Icon = Resources.Global.TrayIconDarkRight;
-            }
-        }
-
-        public void Dispose()
-        {
-            _trayIcon.Visible = false;
-        }
+    public void Dispose()
+    {
+        _trayIcon.Visible = false;
     }
 }

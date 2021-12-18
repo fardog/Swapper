@@ -132,4 +132,10 @@
   <data name="TrayToolTip_PrimaryButtonRight" xml:space="preserve">
     <value>Primary Button: Right</value>
   </data>
+  <data name="AboutBox_Text" xml:space="preserve">
+    <value>About {0}</value>
+  </data>
+  <data name="AboutBox_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
 </root>

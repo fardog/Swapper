@@ -61,6 +61,24 @@ namespace Swapper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About {0}.
+        /// </summary>
+        internal static string AboutBox_Text {
+            get {
+                return ResourceManager.GetString("AboutBox_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version {0}.
+        /// </summary>
+        internal static string AboutBox_Version {
+            get {
+                return ResourceManager.GetString("AboutBox_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to load configuration, resetting to defaults. Error was:\n\n{0}.
         /// </summary>
         internal static string ErrorMessage_LoadingConfiguration {

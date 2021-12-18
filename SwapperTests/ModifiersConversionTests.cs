@@ -1,48 +1,48 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Swapper;
 
-namespace Swapper.Tests
+namespace SwapperTests;
+
+[TestClass]
+public class ModifiersConversionTests
 {
-    [TestClass()]
-    public class ModifiersConversionTests
+    [TestMethod]
+    public void FromStringTest()
     {
-        [TestMethod()]
-        public void FromStringTest()
+        string modifier = "Ctrl";
+        Modifiers expected = Modifiers.Control;
+        Modifiers actual = ModifiersConversion.FromString(modifier);
+
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void FromStringCaseInsensitive()
+    {
+        string modifier = "CTRL";
+        Modifiers expected = Modifiers.Control;
+        Modifiers actual = ModifiersConversion.FromString(modifier);
+
+        Assert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void FromStringOmnibusTest()
+    {
+        Dictionary<string, Modifiers> cases = new()
         {
-            string modifierRepr = "Ctrl";
-            Modifiers expected = Modifiers.Control;
-            Modifiers actual = ModifiersConversion.FromString(modifierRepr);
+            { "Alt", Modifiers.Alt },
+            { "Control", Modifiers.Control },
+            { "Ctrl", Modifiers.Control },
+            { "Shift", Modifiers.Shift },
+            { "Windows", Modifiers.Windows },
+            { "Win", Modifiers.Windows },
+        };
 
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod()]
-        public void FromStringCaseInsensitive()
+        foreach(var (key, value) in cases)
         {
-            string modifierRepr = "CTRL";
-            Modifiers expected = Modifiers.Control;
-            Modifiers actual = ModifiersConversion.FromString(modifierRepr);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod()]
-        public void FromStringOmnibusTest()
-        {
-            Dictionary<string, Modifiers> cases = new()
-            {
-                { "Alt", Modifiers.Alt },
-                { "Control", Modifiers.Control },
-                { "Ctrl", Modifiers.Control },
-                { "Shift", Modifiers.Shift },
-                { "Windows", Modifiers.Windows },
-                { "Win", Modifiers.Windows },
-            };
-
-            foreach(var entry in cases)
-            {
-                Assert.AreEqual(entry.Value, ModifiersConversion.FromString(entry.Key));
-            }
+            Assert.AreEqual(value, ModifiersConversion.FromString(key));
         }
     }
 }
