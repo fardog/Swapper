@@ -7,8 +7,8 @@ namespace Swapper
 {
     public class HotKey
     {
-        public Modifiers Modifiers;
-        public Keys Key;
+        public readonly Modifiers Modifiers;
+        public readonly Keys Key;
 
         public HotKey(Modifiers modifiers, Keys key)
         {

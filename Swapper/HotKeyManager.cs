@@ -39,7 +39,7 @@ namespace Swapper
 
         public event EventHandler<HotKeyEventArgs> HotKeyPressed = delegate { };
 
-        public class HiddenWindow : NativeWindow, IDisposable
+        private sealed class HiddenWindow : NativeWindow, IDisposable
         {
             private static readonly int WM_HOTKEY = 0x0312;
 

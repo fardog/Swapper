@@ -4,8 +4,6 @@ namespace Swapper
 {
     public class SwapperApplicationContext: ApplicationContext
     {
-        private readonly ApplicationManager _application;
-
         public SwapperApplicationContext()
         {
             ConfigurationManager configurationManager;
@@ -24,8 +22,8 @@ namespace Swapper
             HotKeyManager hotKeyManager = new();
             Tray tray = new();
 
-            _application = new ApplicationManager(configurationManager, buttonManager, hotKeyManager, tray);
-            _application.ApplicationExit += (s, ee) => Application.Exit();
+            var application = new ApplicationManager(configurationManager, buttonManager, hotKeyManager, tray);
+            application.ApplicationExit += (_, _) => Application.Exit();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
+using Swapper.Resources;
 
 namespace Swapper
 {
@@ -11,42 +12,37 @@ namespace Swapper
         public AboutBox()
         {
             InitializeComponent();
-            this.Text = $"About {AssemblyTitle}";
+            this.Text = string.Format(en_US.AboutBox_Text, AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = $"Version {AssemblyVersion}";
+            this.labelVersion.Text = string.Format(en_US.AboutBox_Version, AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
         }
 
+        public sealed override string Text
+        {
+            get => base.Text;
+            set => base.Text = value;
+        }
+
         #region Assembly Attribute Accessors
 
-        public static string AssemblyTitle
+        private static string AssemblyTitle
         {
             get
             {
                 object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (titleAttribute.Title != "")
-                    {
-                        return titleAttribute.Title;
-                    }
-                }
-                return UNKNOWN_VALUE_STRING;
+                if (attributes.Length <= 0) return UNKNOWN_VALUE_STRING;
+
+                AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                return titleAttribute.Title != "" ? titleAttribute.Title : UNKNOWN_VALUE_STRING;
             }
         }
 
-        public static string AssemblyVersion
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? UNKNOWN_VALUE_STRING;
-            }
-        }
+        private static string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? UNKNOWN_VALUE_STRING;
 
-        public static string AssemblyDescription
+        private static string AssemblyDescription
         {
             get
             {
@@ -59,7 +55,7 @@ namespace Swapper
             }
         }
 
-        public static string AssemblyProduct
+        private static string AssemblyProduct
         {
             get
             {
@@ -72,7 +68,7 @@ namespace Swapper
             }
         }
 
-        public static string AssemblyCopyright
+        private static string AssemblyCopyright
         {
             get
             {
@@ -85,7 +81,7 @@ namespace Swapper
             }
         }
 
-        public static string AssemblyCompany
+        private static string AssemblyCompany
         {
             get
             {

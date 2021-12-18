@@ -94,7 +94,7 @@ namespace Swapper
             {
                 _aboutBox = new AboutBox();
                 _aboutBox.Show();
-                _aboutBox.FormClosed += (s, ee) => { _aboutBox = null; };
+                _aboutBox.FormClosed += (_, _) => { _aboutBox = null; };
             }
         }
 

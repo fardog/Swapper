@@ -12,7 +12,7 @@ namespace Swapper
         event EventHandler ExitClicked;
     }
 
-    class Tray : ITray, IDisposable
+    internal class Tray : ITray, IDisposable
     {
         private readonly NotifyIcon _trayIcon;
 
@@ -23,10 +23,10 @@ namespace Swapper
         public Tray()
         {
             // Initialize Tray Icon
-            _trayIcon = new NotifyIcon()
+            _trayIcon = new NotifyIcon
             {
                 ContextMenuStrip = new ContextMenuStrip(),
-                Visible = true,
+                Visible = true
             };
             _trayIcon.MouseClick += TrayItem_MouseClick;
 
@@ -40,17 +40,17 @@ namespace Swapper
         {
             if (e.Button != MouseButtons.Left) return;
 
-            ButtonSwapClicked.Invoke(this, new EventArgs());
+            ButtonSwapClicked.Invoke(this, EventArgs.Empty);
         }
 
         private void MenuItem_About(object? sender, EventArgs e)
         {
-            AboutClicked.Invoke(this, new EventArgs());
+            AboutClicked.Invoke(this, EventArgs.Empty);
         }
 
         private void MenuItem_Exit(object? sender, EventArgs e)
         {
-            ExitClicked.Invoke(this, new EventArgs());
+            ExitClicked.Invoke(this, EventArgs.Empty);
         }
 
         public void SetPrimaryButton(ButtonState buttonState)
@@ -62,7 +62,6 @@ namespace Swapper
             }
             else if (buttonState == ButtonState.Right)
             {
-                
                 _trayIcon.Text = Resources.en_US.TrayToolTip_PrimaryButtonRight;
                 _trayIcon.Icon = Resources.Global.TrayIconDarkRight;
             }

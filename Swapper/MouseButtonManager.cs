@@ -18,7 +18,7 @@ namespace Swapper
 
         public MouseButtonChangedEventArgs(ButtonState primaryButton)
         {
-            this.PrimaryButton = primaryButton;
+            PrimaryButton = primaryButton;
         }
     }
 
@@ -41,7 +41,7 @@ namespace Swapper
 
         public MouseButtonManager()
         {
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(System_UserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged += System_UserPreferenceChanged;
 
             UpdateCurrentPrimaryButton();
         }
@@ -54,10 +54,7 @@ namespace Swapper
 
         public ButtonState PrimaryButton
         {
-            get
-            {
-                return _primaryButton;
-            }
+            get => _primaryButton;
             set
             {
                 if (value == ButtonState.Left)
@@ -70,7 +67,7 @@ namespace Swapper
                 }
 
                 _primaryButton = value;
-                MouseButtonChanged?.Invoke(this, new MouseButtonChangedEventArgs(value));
+                MouseButtonChanged(this, new MouseButtonChangedEventArgs(value));
             }
         }
 

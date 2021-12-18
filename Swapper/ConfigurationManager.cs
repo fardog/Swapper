@@ -33,7 +33,7 @@ namespace Swapper
             store = value;
             writeConfiguration(value?.ToString() ?? "");
             Properties.Settings.Default.Save();
-            ConfigurationChange(this, new EventArgs());
+            ConfigurationChange(this, EventArgs.Empty);
         }
 
         private static HotKey? LoadHotKey(string value)

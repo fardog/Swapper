@@ -1,7 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Swapper;
 
-namespace Swapper.Tests
+namespace SwapperTests
 {
     [TestClass()]
     public class ModifiersConversionTests
